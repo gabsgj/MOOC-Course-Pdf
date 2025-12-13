@@ -1,0 +1,16 @@
+KTU Course Category,KTU Course Name,KTU Course Code,NPTEL Course Name,Offering Institute
+PE4,Computer Vision,PECST745,Computer Vision and Image Processing - Fundamentals and Applications,IIT Guwahati
+PE4,Blockchain and Cryptocurrencies,PECST747,Blockchain and its Applications,IIT Kharagpur
+PE5,Algorithms For Data Science,PECST785,Data Science for Engineers,IIT Madras
+PE5,High Performance Computing,PECST757,High Performance Scientific Computing,IIT Bombay
+OE2,Optimization Techniques,OEECT723,Optimization from Fundamentals,IIT Bombay
+OE2,Robotics,OEMET722,Robotics and Control: Theory and Practice,IIT Roorkee
+PE6,Natural Language Processing,PECST862,Natural Language Processing,IIT Kharagpur
+OE3,Internet of Things,OEECT831,Introduction to Internet of Things,IIT Kharagpur
+OE3,PLC and Automation,OEEET832,Industrial Automation and Control,IIT Kharagpur
+HMC Elective 1,"Project Management: Planning, Execution, Evaluation and Control",HMCET502,Project Management,IIT Roorkee
+Honours,Object Oriented Design using UML,HNCST509,"Object Oriented System Development using UML, Java and Patterns",IIT Kharagpur
+Honours,Advanced Algorithms,HNCST609,Design and Analysis of Algorithms,Chennai Mathematical Institute
+Honours,Advanced Cryptography,HNCST709,Cryptography and Network Security,IIT Kharagpur
+Elective,Fuzzy Systems,FUZZY_SYSTEMS,Fuzzy Logic and Neural Networks,IIT
+Elective,Approximation Algorithms,APPROX_ALGO,Approximation Algorithms,IIT
