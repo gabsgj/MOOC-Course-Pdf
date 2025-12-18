@@ -1,0 +1,34 @@
+﻿Course Name,Course Category,Course Code,MOOC Course Name,NPTEL Subject ID,Course ID,Course URL,Coordinator(s),Discipline,Offering Institute,Duration,Content Type,Platform
+Computer Vision,Program Elective 4,PECST745,Computer Vision and Image Processing - Fundamentals and Applications,108103174,noc26-ee31,https://nptel.ac.in/courses/108103174,Prof. M. K. Bhuyan,"Computer Science and Engineering, Electrical and Electronics Engineering",IIT Guwahati,12 weeks,Video,NPTEL
+Web Programming,Program Elective 4,PECST742,Web Technology,,,https://onlinecourses.swayam2.ac.in/nou24_cs09/preview,"Dr. Ashutosh Kumar Bhatt ",Computer Science and Engineering,"Uttarakhand Open University, Haldwani ",12 weeks,Video,SWAYAM
+Blockchain and Cryptocurrencies,Program Elective 4,"PECST747 ",Blockchain and its Applications,106105235,noc26-cs34,https://nptel.ac.in/courses/106105235,"Prof. Sandip Chakraborty, 
+Prof. Shamik Sural",Computer Science and Engineering,IIT Kharagpur,12 weeks,Video,NPTEL
+Approximation Algorithms,Program Elective 4,"PECST749 ",APPROXIMATION ALGORITHM,106105471,,https://nptel.ac.in/courses/106105471,Prof. Palash Dey,Computer Science and Engineering,IIT Kharagpur,12 weeks,Video,NPTEL
+Algorithms For Data Science,Program Elective 5,PECST785,Data Science for Engineers,106106179,noc26-cs65,https://nptel.ac.in/courses/106106179,Prof. Shankar Narasimhan; Prof. Ragunathan Rengaswamy,Computer Science and Engineering,IIT Madras,8 weeks,Video,NPTEL
+Parallel Algorithms (1),Program Elective 5,PECST759,Parallel Computer Architecture,106103359,noc26-cs25,https://nptel.ac.in/courses/106103359,"Prof. Hemangee K.
+  Kapoor",Computer Science and Engineering,IIT Guwahati,12 weeks,Video,NPTEL
+Fuzzy Systems,Program Elective 5,PECST753,"FUZZY SETS, LOGIC AND SYSTEMS & APPLICATIONS",108104157,noc26-ee38,https://nptel.ac.in/courses/108104157,"Prof. Nishchal Kumar
+  Verma",Electrical Engineering,IIT Kanpur,12 weeks,Video,NPTEL
+High Performance Computing,Program Elective 5,"PECST757 ",High Performance Scientific Computing,111101611,noc26-ma16,https://nptel.ac.in/courses/111101611,"Prof. Shivasubramanian Gopalakrishnan, 
+Prof. Om Jadhav, 
+Prof. S Vamshi Krishna, 
+Prof. Ashish Kuvelkar",Computer Science and Engineering,IIT Bombay,12 weeks,Video,NPTEL
+Parallel Algorithms,Program Elective 5,PECST759,Parallel Algorithms,106103188,,https://nptel.ac.in/courses/106103188,Prof. Sajith Gopalan,Computer Science and Engineering,IIT Guwahati,12 weeks,Video,
+Optimization Techniques,Open Elective 2,OEECT723,"Optimization from fundamentals ",112101298,noc26-me09,https://nptel.ac.in/courses/112101298,Prof. Ankur A. Kulkarni,Machanical Engineering,IIT Bombay,12 weeks,Video,NPTEL
+Robotics,Open Elective 2,OEMET722,Robotics and Control : Theory and Practice,112107289,noc26-me72,https://nptel.ac.in/courses/112107289,Prof. M. Felix Orlando; Prof. N. Sukavanam,Machanical Engineering,IIT Roorkee,8 weeks,Video,NPTEL
+Natural Language Processing,Program Elective 6,PECST862,Natural Language Processing,106105158,noc26-cs45,https://nptel.ac.in/courses/106105158,Prof. Pawan Goyal,Computer Science and Engineering,IIT Kharagpur,12 weeks,Video,NPTEL
+CLOUD COMPUTING AND APPLICATIONS,Open Elective 3,OEERT834,Cloud Computing,106105167,noc26-cs55,https://nptel.ac.in/courses/106105167,Prof. Soumya Kanti Ghosh,Computer Science and Engineering,IIT Kharagpur,12 weeks,Video,NPTEL
+INTRODUCTION TO ALGORITHM,Open Elective 3,OECST831,,,,,,,,,,
+PLC & Automation,Open Elective 3,OEEET832,Industrial Automation and Control,108105088,noc26-ee47,https://nptel.ac.in/courses/108105088,Prof. Alokkanti Deb,Electrical Engineering,IIT Kharagpur,12 weeks,Video,NPTEL
+Internet of Things,Open Elective 3,OEECT831,Introduction to Internet Of Things,106105166,noc26-cs37,https://nptel.ac.in/courses/106105166,Prof. Sudip Misra,Computer Science and Engineering,IIT Kharagpur,12 weeks,Video,NPTEL
+CLOUD COMPUTING,Open Elective 3,OECST722,,,,,,,,,,
+"Organizational Behavior and Business
+Communication",HMC Elective,UEHUT803,Organizational Behaviour: Individual Dynamics in Organization,110103433,noc26-mg20,https://nptel.ac.in/courses/110103433,"Prof. Abraham Cyril
+  Issac",Management,IIT Guwahati,12 weeks,Video,NPTEL
+"Project Management: Planning, Execution, Evaluation and Control",HMC Elective,UEHUT704,"Project Management : Planning,
+Execution, Evaluation And Control",110105167,,,Prof. Sanjib Chowdhury,Management,IIT Kharagpur,,Video,
+"Project Management: Planning, Execution, Evaluation and Control (1)",HMC Elective,UEHUT704,Project Management,110107430,noc26_mg77,https://nptel.ac.in/courses/110107430,Prof. A. Ramesh,Management,IIT Roorkee,8 Weeks,Video,NPTEL
+Advanced Cryptography,Honours,"HNCST709 ",Cryptography and Network Security,106105162,noc26-cs57,https://nptel.ac.in/courses/106105162,"Prof. Sourav
+Mukhopadhyay",Computer Science and Engineering," IIT Kharagpur",12 weeks,Video,NPTEL
+Object Oriented Design using UML,Honours,"HNCST509 ","Object Oriented System Development using UML, Java And Patterns",106105224,noc26-cs46,https://nptel.ac.in/courses/106105224,Prof. Rajib Mall,Computer Science and Engineering,IIT Kharagpur,12 weeks,Video,NPTEL
+Advanced Algorithms,Honours,"HNCST609 ",Design and Analysis of Algorithms,106106131,noc26-cs67,https://nptel.ac.in/courses/106106131,Prof. Madhavan Mukund,Computer Science and Engineering,Chennai Mathematical Institute,8 weeks,Video,SWAYAM

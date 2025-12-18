@@ -12,6 +12,35 @@ This will create individual PDF reports in the `MOOC_Reports` folder.
 
 ---
 
+## CSV-driven approval proposal (MyFinalScript.py)
+
+If you want a reusable generator that reads all mappings from `CSVV.csv` and produces an approval proposal PDF where each mapping contains:
+- A front page with the required details
+- The **KTU syllabus PDF appended directly** from `KTU SYLLABUS/`
+- The **MOOC/NPTEL syllabus PDF appended directly** from `nptel/`
+
+Install dependencies:
+```
+pip install -r requirements.txt
+```
+
+Generate a single combined PDF (default):
+```
+python MyFinalScript.py
+```
+
+Generate one PDF per mapping:
+```
+python MyFinalScript.py --mode individual
+```
+
+Dry run (checks matching without writing PDFs):
+```
+python MyFinalScript.py --dry-run
+```
+
+---
+
 ## Add New Mapping
 
 To add a new KTU-NPTEL mapping, edit `generate_mooc_reports.py` and add an entry to the `MAPPINGS` list:
