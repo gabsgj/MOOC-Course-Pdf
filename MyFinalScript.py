@@ -53,6 +53,12 @@ DEFAULT_CSV = "CSVV.csv"
 DEFAULT_OUTPUT_DIR = "Final Output"
 
 
+WEB_MAPPING_KEYWORDS = (
+    "web programming",
+    "web technology",
+)
+
+
 @dataclass(frozen=True)
 class MappingRow:
     ktu_course_name: str
@@ -368,6 +374,177 @@ def _build_cover_page_pdf(row: MappingRow, ktu_pdf_name: str, mooc_pdf_name: str
     return buf.getvalue()
 
 
+def _build_document_cover_pdf(*, branch_text: str) -> bytes:
+    buf = BytesIO()
+
+    styles = getSampleStyleSheet()
+    title = ParagraphStyle(
+        "DocTitle",
+        parent=styles["Title"],
+        fontName="Helvetica-Bold",
+        fontSize=28,
+        leading=32,
+        alignment=1,
+        spaceAfter=20,
+    )
+    sub = ParagraphStyle(
+        "DocSub",
+        parent=styles["Normal"],
+        fontName="Helvetica",
+        fontSize=14,
+        leading=18,
+        alignment=1,
+        spaceAfter=10,
+    )
+    small = ParagraphStyle(
+        "DocSmall",
+        parent=sub,
+        fontSize=12,
+        leading=16,
+        textColor=colors.grey,
+        spaceAfter=0,
+    )
+
+    doc = SimpleDocTemplate(
+        buf,
+        pagesize=A4,
+        leftMargin=2.0 * cm,
+        rightMargin=2.0 * cm,
+        topMargin=2.5 * cm,
+        bottomMargin=2.5 * cm,
+        title="MOOC Courses",
+    )
+
+    story: List[object] = []
+    story.append(Spacer(1, 8 * cm))
+    story.append(Paragraph("MOOC Courses", title))
+    story.append(Paragraph(_escape_para(branch_text), sub))
+    story.append(Spacer(1, 1.2 * cm))
+    story.append(Paragraph(f"Date: {_escape_para(datetime.now().strftime('%d %b %Y'))}", small))
+    doc.build(story)
+    return buf.getvalue()
+
+
+def _build_index_pdf(entries: Sequence[Tuple[int, str, str, str, int]]) -> bytes:
+    """Build an index page listing mappings and their start page in the combined PDF.
+
+    entries: (sno, course_code, ktu_name, mooc_name, start_page)
+    """
+    buf = BytesIO()
+    styles = getSampleStyleSheet()
+
+    title = ParagraphStyle(
+        "IndexTitle",
+        parent=styles["Title"],
+        fontName="Helvetica-Bold",
+        fontSize=16,
+        leading=20,
+        spaceAfter=10,
+    )
+    cell = ParagraphStyle(
+        "IndexCell",
+        parent=styles["Normal"],
+        fontName="Helvetica",
+        fontSize=9.5,
+        leading=12,
+    )
+    head = ParagraphStyle(
+        "IndexHead",
+        parent=cell,
+        fontName="Helvetica-Bold",
+    )
+
+    doc = SimpleDocTemplate(
+        buf,
+        pagesize=A4,
+        leftMargin=1.7 * cm,
+        rightMargin=1.7 * cm,
+        topMargin=1.8 * cm,
+        bottomMargin=1.8 * cm,
+        title="Index",
+    )
+
+    story: List[object] = []
+    story.append(Paragraph("INDEX", title))
+    story.append(Spacer(1, 6))
+
+    table_data: List[List[Paragraph]] = []
+    table_data.append(
+        [
+            Paragraph("S.No", head),
+            Paragraph("KTU Course", head),
+            Paragraph("MOOC Course", head),
+            Paragraph("Start Page", head),
+        ]
+    )
+
+    for sno, code, ktu_name, mooc_name, start_page in entries:
+        ktu_text = f"{_escape_para(code)} - {_escape_para(ktu_name)}" if code else _escape_para(ktu_name)
+        table_data.append(
+            [
+                Paragraph(str(sno), cell),
+                Paragraph(ktu_text or "-", cell),
+                Paragraph(_escape_para(mooc_name) or "-", cell),
+                Paragraph(str(start_page), cell),
+            ]
+        )
+
+    table = Table(
+        table_data,
+        colWidths=[1.3 * cm, 7.2 * cm, 7.0 * cm, 2.0 * cm],
+        hAlign="LEFT",
+        repeatRows=1,
+    )
+    table.setStyle(
+        TableStyle(
+            [
+                ("VALIGN", (0, 0), (-1, -1), "TOP"),
+                ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.whitesmoke, colors.white]),
+                ("INNERGRID", (0, 0), (-1, -1), 0.25, colors.lightgrey),
+                ("BOX", (0, 0), (-1, -1), 0.6, colors.grey),
+                ("LEFTPADDING", (0, 0), (-1, -1), 5),
+                ("RIGHTPADDING", (0, 0), (-1, -1), 5),
+                ("TOPPADDING", (0, 0), (-1, -1), 3),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+            ]
+        )
+    )
+
+    story.append(table)
+    doc.build(story)
+    return buf.getvalue()
+
+
+def _pdf_page_count_from_bytes(pdf_bytes: bytes) -> int:
+    return len(PdfReader(BytesIO(pdf_bytes)).pages)
+
+
+def _pdf_page_count_from_path(pdf_path: Optional[str]) -> int:
+    if not pdf_path:
+        return 0
+    try:
+        return len(PdfReader(pdf_path).pages)
+    except Exception:
+        return 0
+
+
+def _is_web_mapping(row: MappingRow) -> bool:
+    hay = f"{row.course_code} {row.ktu_course_name} {row.mooc_course_name}".lower()
+    if any(k in hay for k in WEB_MAPPING_KEYWORDS):
+        return True
+    # Explicitly catch the known KTU code as well.
+    if row.course_code.strip().upper() == "PECST742":
+        return True
+    return False
+
+
+def _order_rows(rows: Sequence[MappingRow]) -> List[MappingRow]:
+    """Preserve CSV order, but push Web Programming/Technology mapping to the end."""
+    indexed = list(enumerate(rows))
+    indexed.sort(key=lambda t: (1 if _is_web_mapping(t[1]) else 0, t[0]))
+    return [r for _, r in indexed]
+
+
 def _append_pdf(writer: PdfWriter, pdf_path: str) -> None:
     reader = PdfReader(pdf_path)
     for page in reader.pages:
@@ -418,6 +595,9 @@ def generate_report(
             continue
         usable_rows.append(r)
 
+    # Ordering requirement: Web Technology/Web Programming mapping must be last.
+    usable_rows = _order_rows(usable_rows)
+
     if not usable_rows:
         raise ValueError("No usable mappings found (CSV rows are empty/incomplete).")
 
@@ -435,8 +615,14 @@ def generate_report(
         return ktu_pdf, mooc_pdf
 
     if mode == "combined":
+        # Build combined: (1) document cover (2) index (3) per-mapping sections
         writer = PdfWriter()
 
+        doc_cover_bytes = _build_document_cover_pdf(branch_text="Branch: CSE")
+        doc_cover_pages = _pdf_page_count_from_bytes(doc_cover_bytes)
+
+        # Resolve all paths once and compute section sizes (for index start pages)
+        resolved: List[Tuple[MappingRow, Optional[str], Optional[str], int]] = []
         for idx, r in enumerate(usable_rows, start=1):
             ktu_pdf, mooc_pdf = resolve_paths(r)
             if not ktu_pdf:
@@ -451,10 +637,41 @@ def generate_report(
                 ktu_pdf_name=os.path.basename(ktu_pdf) if ktu_pdf else "",
                 mooc_pdf_name=os.path.basename(mooc_pdf) if mooc_pdf else "",
             )
-            cover_reader = PdfReader(BytesIO(cover_bytes))
-            for page in cover_reader.pages:
-                writer.add_page(page)
+            cover_pages = _pdf_page_count_from_bytes(cover_bytes)
+            section_pages = cover_pages + _pdf_page_count_from_path(ktu_pdf) + _pdf_page_count_from_path(mooc_pdf)
+            resolved.append((r, ktu_pdf, mooc_pdf, section_pages))
 
+        # Build index with stable page numbers (iterate in case index spills to multiple pages)
+        assumed_index_pages = 1
+        index_bytes = b""
+        for _ in range(3):
+            start_page = doc_cover_pages + assumed_index_pages + 1
+            entries: List[Tuple[int, str, str, str, int]] = []
+            cursor = start_page
+            for sno, (r, _ktu, _mooc, sec_pages) in enumerate(resolved, start=1):
+                entries.append((sno, r.course_code, r.ktu_course_name, r.mooc_course_name, cursor))
+                cursor += sec_pages
+
+            index_bytes = _build_index_pdf(entries)
+            actual_index_pages = _pdf_page_count_from_bytes(index_bytes)
+            if actual_index_pages == assumed_index_pages:
+                break
+            assumed_index_pages = actual_index_pages
+
+        # Assemble final combined PDF
+        for page in PdfReader(BytesIO(doc_cover_bytes)).pages:
+            writer.add_page(page)
+        for page in PdfReader(BytesIO(index_bytes)).pages:
+            writer.add_page(page)
+
+        for r, ktu_pdf, mooc_pdf, _sec_pages in resolved:
+            cover_bytes = _build_cover_page_pdf(
+                r,
+                ktu_pdf_name=os.path.basename(ktu_pdf) if ktu_pdf else "",
+                mooc_pdf_name=os.path.basename(mooc_pdf) if mooc_pdf else "",
+            )
+            for page in PdfReader(BytesIO(cover_bytes)).pages:
+                writer.add_page(page)
             if ktu_pdf:
                 _append_pdf(writer, ktu_pdf)
             if mooc_pdf:

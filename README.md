@@ -29,6 +29,13 @@ Generate a single combined PDF (default):
 python MyFinalScript.py
 ```
 
+The combined PDF includes:
+- A document front page
+- An index page with start-page numbers for each mapping
+- Then each mapping section (front page + KTU PDF + MOOC/NPTEL PDF)
+
+Note: The Web Programming/Web Technology mapping is automatically placed last (to keep the large MOOC syllabus at the end).
+
 Generate one PDF per mapping:
 ```
 python MyFinalScript.py --mode individual
