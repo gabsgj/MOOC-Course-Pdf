@@ -375,34 +375,129 @@ def _build_cover_page_pdf(row: MappingRow, ktu_pdf_name: str, mooc_pdf_name: str
 
 
 def _build_document_cover_pdf(*, branch_text: str) -> bytes:
+    """Build a formal letter as the first page of the document."""
     buf = BytesIO()
 
     styles = getSampleStyleSheet()
-    title = ParagraphStyle(
-        "DocTitle",
-        parent=styles["Title"],
+    
+    # Style for "From" header
+    from_style = ParagraphStyle(
+        "FromStyle",
+        parent=styles["Normal"],
         fontName="Helvetica-Bold",
-        fontSize=28,
-        leading=32,
-        alignment=1,
-        spaceAfter=20,
+        fontSize=11,
+        leading=14,
+        alignment=0,  # Left aligned
+        spaceAfter=4,
     )
-    sub = ParagraphStyle(
-        "DocSub",
+    
+    # Style for address lines
+    address_style = ParagraphStyle(
+        "AddressStyle",
         parent=styles["Normal"],
         fontName="Helvetica",
-        fontSize=14,
-        leading=18,
-        alignment=1,
-        spaceAfter=10,
+        fontSize=11,
+        leading=14,
+        alignment=0,
+        spaceAfter=2,
     )
-    small = ParagraphStyle(
-        "DocSmall",
-        parent=sub,
-        fontSize=12,
-        leading=16,
-        textColor=colors.grey,
-        spaceAfter=0,
+    
+    # Style for "To" header
+    to_style = ParagraphStyle(
+        "ToStyle",
+        parent=styles["Normal"],
+        fontName="Helvetica-Bold",
+        fontSize=11,
+        leading=14,
+        alignment=0,
+        spaceBefore=12,
+        spaceAfter=4,
+    )
+    
+    # Style for date and subject
+    date_style = ParagraphStyle(
+        "DateStyle",
+        parent=styles["Normal"],
+        fontName="Helvetica",
+        fontSize=11,
+        leading=14,
+        alignment=0,
+        spaceBefore=12,
+        spaceAfter=4,
+    )
+    
+    subject_style = ParagraphStyle(
+        "SubjectStyle",
+        parent=styles["Normal"],
+        fontName="Helvetica-Bold",
+        fontSize=11,
+        leading=14,
+        alignment=0,
+        spaceBefore=8,
+        spaceAfter=8,
+    )
+    
+    # Style for salutation
+    salutation_style = ParagraphStyle(
+        "SalutationStyle",
+        parent=styles["Normal"],
+        fontName="Helvetica",
+        fontSize=11,
+        leading=14,
+        alignment=0,
+        spaceBefore=10,
+        spaceAfter=8,
+    )
+    
+    # Style for body paragraphs
+    body_style = ParagraphStyle(
+        "BodyStyle",
+        parent=styles["Normal"],
+        fontName="Helvetica",
+        fontSize=10.5,
+        leading=14,
+        alignment=4,  # Justified
+        spaceBefore=6,
+        spaceAfter=6,
+        firstLineIndent=0.5 * cm,
+    )
+    
+    # Style for bullet points
+    bullet_style = ParagraphStyle(
+        "BulletStyle",
+        parent=styles["Normal"],
+        fontName="Helvetica",
+        fontSize=10.5,
+        leading=14,
+        alignment=0,
+        leftIndent=1 * cm,
+        spaceBefore=3,
+        spaceAfter=3,
+        bulletIndent=0.5 * cm,
+    )
+    
+    # Style for closing
+    closing_style = ParagraphStyle(
+        "ClosingStyle",
+        parent=styles["Normal"],
+        fontName="Helvetica",
+        fontSize=11,
+        leading=14,
+        alignment=0,
+        spaceBefore=12,
+        spaceAfter=4,
+    )
+    
+    # Style for signature block
+    signature_style = ParagraphStyle(
+        "SignatureStyle",
+        parent=styles["Normal"],
+        fontName="Helvetica-Bold",
+        fontSize=11,
+        leading=14,
+        alignment=0,
+        spaceBefore=8,
+        spaceAfter=2,
     )
 
     doc = SimpleDocTemplate(
@@ -410,17 +505,100 @@ def _build_document_cover_pdf(*, branch_text: str) -> bytes:
         pagesize=A4,
         leftMargin=2.0 * cm,
         rightMargin=2.0 * cm,
-        topMargin=2.5 * cm,
-        bottomMargin=2.5 * cm,
-        title="MOOC Courses",
+        topMargin=1.8 * cm,
+        bottomMargin=1.8 * cm,
+        title="MOOC Course Approval Request",
     )
 
     story: List[object] = []
-    story.append(Spacer(1, 8 * cm))
-    story.append(Paragraph("MOOC Courses", title))
-    story.append(Paragraph(_escape_para(branch_text), sub))
-    story.append(Spacer(1, 1.2 * cm))
-    story.append(Paragraph(f"Date: {_escape_para(datetime.now().strftime('%d %b %Y'))}", small))
+    
+    # From section
+    story.append(Paragraph("<b>From</b>", from_style))
+    story.append(Paragraph("The Students of", address_style))
+    story.append(Paragraph("B.Tech Computer Science and Engineering", address_style))
+    story.append(Paragraph("Semester IV", address_style))
+    story.append(Paragraph("Government Engineering College, Thrissur", address_style))
+    
+    story.append(Spacer(1, 0.4 * cm))
+    
+    # To section
+    story.append(Paragraph("<b>To</b>", to_style))
+    story.append(Paragraph("The Head of the Department", address_style))
+    story.append(Paragraph("Department of Computer Science and Engineering", address_style))
+    story.append(Paragraph("Government Engineering College, Thrissur", address_style))
+    
+    story.append(Spacer(1, 0.3 * cm))
+    
+    # Date
+    story.append(Paragraph("Date: ___________", date_style))
+    
+    # Subject
+    story.append(Paragraph(
+        "<b>Subject:</b> Request for approval of MOOC courses as per KTU B.Tech Regulations",
+        subject_style
+    ))
+    
+    story.append(Spacer(1, 0.2 * cm))
+    
+    # Salutation
+    story.append(Paragraph("Respected Sir/Madam,", salutation_style))
+    
+    # Body paragraphs
+    story.append(Paragraph(
+        "We, the students of B.Tech Computer Science and Engineering, Semester IV, "
+        "Government Engineering College, Thrissur, respectfully submit this request seeking "
+        "approval for the MOOC courses proposed by us, in accordance with the provisions of "
+        "the APJ Abdul Kalam Technological University (KTU) B.Tech Regulations.",
+        body_style
+    ))
+    
+    story.append(Paragraph(
+        "We propose to undertake the attached MOOC courses as equivalents to the corresponding "
+        "subjects prescribed in the KTU curriculum, subject to the approval of the competent authority.",
+        body_style
+    ))
+    
+    story.append(Paragraph(
+        "For each proposed MOOC course, the following documents are enclosed for your kind consideration:",
+        body_style
+    ))
+    
+    # Bullet points
+    story.append(Paragraph("• The KTU syllabus of the course to be replaced", bullet_style))
+    story.append(Paragraph("• The MOOC syllabus / course outline", bullet_style))
+    story.append(Paragraph(
+        "• Details of the offering institute/university, course duration, credit information, and assessment structure",
+        bullet_style
+    ))
+    
+    story.append(Paragraph(
+        "We assure that we shall strictly adhere to all guidelines prescribed by the college and "
+        "the university, complete the approved MOOC courses within the stipulated time, and submit "
+        "the required course completion certificates and supporting documents within the prescribed deadlines.",
+        body_style
+    ))
+    
+    story.append(Paragraph(
+        "We kindly request the Department Academic Committee and the competent authority to review "
+        "the enclosed documents and grant approval for the proposed MOOC courses.",
+        body_style
+    ))
+    
+    story.append(Spacer(1, 0.3 * cm))
+    
+    # Closing
+    story.append(Paragraph("Thanking you.", closing_style))
+    story.append(Spacer(1, 0.2 * cm))
+    story.append(Paragraph("Yours faithfully,", closing_style))
+    
+    story.append(Spacer(1, 0.5 * cm))
+    
+    # Signature block
+    story.append(Paragraph("<b>Students of</b>", signature_style))
+    story.append(Paragraph("B.Tech Computer Science and Engineering", address_style))
+    story.append(Paragraph("Semester IV", address_style))
+    story.append(Paragraph("Government Engineering College, Thrissur", address_style))
+    
     doc.build(story)
     return buf.getvalue()
 
@@ -513,6 +691,42 @@ def _build_index_pdf(entries: Sequence[Tuple[int, str, str, str, int]]) -> bytes
     story.append(table)
     doc.build(story)
     return buf.getvalue()
+
+
+def _build_blank_page_pdf() -> bytes:
+    """Build a blank A4 page for duplex printing padding."""
+    buf = BytesIO()
+    doc = SimpleDocTemplate(
+        buf,
+        pagesize=A4,
+        leftMargin=2.0 * cm,
+        rightMargin=2.0 * cm,
+        topMargin=2.0 * cm,
+        bottomMargin=2.0 * cm,
+    )
+    # Build with empty story to create a blank page
+    doc.build([Spacer(1, 1)])
+    return buf.getvalue()
+
+
+def _add_blank_page_if_needed(writer: PdfWriter) -> bool:
+    """Add a blank page if the current page count is odd (next page would be left/even).
+    
+    For duplex printing, we want important pages (Index, Proposal covers) to appear
+    on the right side (odd page numbers = 1, 3, 5...). If after adding content we're
+    at an odd total, the NEXT page would be even (left side), so we insert a blank.
+    
+    Returns True if a blank page was added.
+    """
+    current_pages = len(writer.pages)
+    # If current page count is odd, next page will be at even position (left side)
+    # So we need to add a blank page to push the next content to odd position (right side)
+    if current_pages % 2 == 1:
+        blank_bytes = _build_blank_page_pdf()
+        for page in PdfReader(BytesIO(blank_bytes)).pages:
+            writer.add_page(page)
+        return True
+    return False
 
 
 def _pdf_page_count_from_bytes(pdf_bytes: bytes) -> int:
@@ -661,10 +875,16 @@ def generate_report(
         # Assemble final combined PDF
         for page in PdfReader(BytesIO(doc_cover_bytes)).pages:
             writer.add_page(page)
+        
+        # Ensure Index starts on right side (odd page number)
+        _add_blank_page_if_needed(writer)
         for page in PdfReader(BytesIO(index_bytes)).pages:
             writer.add_page(page)
 
         for r, ktu_pdf, mooc_pdf, _sec_pages in resolved:
+            # Ensure each MOOC Approval Proposal cover starts on right side (odd page number)
+            _add_blank_page_if_needed(writer)
+            
             cover_bytes = _build_cover_page_pdf(
                 r,
                 ktu_pdf_name=os.path.basename(ktu_pdf) if ktu_pdf else "",
